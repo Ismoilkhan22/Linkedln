@@ -1,8 +1,9 @@
+from rest_framework import permissions
 from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 
-from work.models import Profile, Experience, Post
+from work.models import Profile, Experience, Post, User
 from work.serializers import ProfileSerializer, PostSerializer, ExperienceSerializer
 
 
@@ -102,17 +103,20 @@ class PostView(GenericAPIView):
         data = request.data
         root = Post.objects.filter(pk=pk).first()
         if not root:
-            return Response({"error":"Bunday post mavjud emas !"})
+            return Response({"error": "Bunday post mavjud emas !"})
         serializer = self.serializer_class(data=data, instance=root, partial=True)
-        serializer.is_valid(raise_exception=True,)
+        serializer.is_valid(raise_exception=True, )
         result = serializer.save()
         return Response(result.format())
 
     def delete(self, request, pk):
         try:
             Post.objects.get(pk=pk).delete()
-            return Response({"natija":"bajarildi"})
+            return Response({"natija": "bajarildi"})
         except:
-            return Response({"error":" bunaqasi yo uxlama !"})
+            return Response({"error": " bunaqasi yo uxlama !"})
 
-
+    def perfrom_update(self, serializer):
+        result = serializer.save()
+        if result.user != self.request.user:
+            raise permissions.PermissionDonied("Siz bu postni o'zgartira olmaysiz")
