@@ -1,12 +1,6 @@
 from rest_framework import serializers
 
-from work.models import Profile, Post, Friend, Experience, PostImgs
-
-
-class ProfileSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Profile
-        fields = "__all__"
+from work.models import  Post, Friend, Experience, PostImgs
 
 
 class PostSerializer(serializers.ModelSerializer):

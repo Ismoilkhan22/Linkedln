@@ -2,20 +2,6 @@ from django.db import models
 from .auth import User
 
 
-class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.SET_NULL, null=True, blank=True)
-    about = models.TextField(blank=True)
-    photo = models.ImageField(upload_to='imgs')
-
-    def format(self):
-        return {
-            "id": self.id,
-            "about": self.about,
-            "photo": self.photo,
-
-        }
-
-
 class Post(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     about = models.TextField()
